@@ -18,7 +18,7 @@ services:
 
   postgres:
     image: postgres:17
-    container_name: twitch_bot # NAME
+    container_name: twitch_postgres # NAME
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
