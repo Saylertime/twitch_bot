@@ -10,6 +10,7 @@ from aiogram.webhook.aiohttp_server import (
     setup_application,
 )
 from aiohttp import web
+from html import escape
 
 from config_data import config
 from handlers import routers
@@ -281,29 +282,31 @@ async def send_twitch_notification(
     streamer_login = event["broadcaster_user_login"]
     streamer_name = event["broadcaster_user_name"]
 
-    # Twitch может прислать stream.online немного раньше,
-    # чем данные появятся в GET /streams.
     await asyncio.sleep(3)
 
     stream = await get_stream_details(streamer_id)
 
+    safe_streamer_name = escape(streamer_name)
+    safe_streamer_login = escape(streamer_login)
+
     if stream:
-        game_name = (
-            stream["game_name"]
-            or "Без категории"
+        safe_game_name = escape(
+            stream["game_name"] or "Без категории"
         )
-        title = stream["title"]
+        safe_title = escape(
+            stream["title"] or "Без названия"
+        )
 
         text = (
-            f"🔴 <b>{streamer_name} начал трансляцию</b>\n\n"
-            f"🎮 {game_name}\n"
-            f"📺 {title}\n\n"
-            f"https://twitch.tv/{streamer_login}"
+            f"🔴 <b>{safe_streamer_name} начал трансляцию</b>\n\n"
+            f"🎮 {safe_game_name}\n"
+            f"📺 {safe_title}\n\n"
+            f"https://twitch.tv/{safe_streamer_login}"
         )
     else:
         text = (
-            f"🔴 <b>{streamer_name} начал трансляцию</b>\n\n"
-            f"https://twitch.tv/{streamer_login}"
+            f"🔴 <b>{safe_streamer_name} начал трансляцию</b>\n\n"
+            f"https://twitch.tv/{safe_streamer_login}"
         )
 
     await bot.send_message(
