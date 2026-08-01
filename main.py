@@ -40,6 +40,12 @@ TWITCH_CALLBACK_URL = (
 TRACKED_STREAMERS = [
     "thereisnofuture",
     "toooschi",
+    "sisuka7",
+    "elgris",
+    "wirtual",
+    "lirik",
+    "honeymad",
+    "c_a_k_e",
 ]
 
 
